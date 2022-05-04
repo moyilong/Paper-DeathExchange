@@ -48,7 +48,7 @@ public final class Deathexchange extends JavaPlugin implements Listener {
         for (Player i : Bukkit.getOnlinePlayers()) {
             boolean addon = true;
             for (String b : ExchangeExcludeUser) {
-                if (i.getUniqueId().toString() == b) {
+                if (i.getUniqueId().toString().equals(b)) {
                     addon = false;
                     break;
                 }
@@ -131,23 +131,27 @@ public final class Deathexchange extends JavaPlugin implements Listener {
 
     @EventHandler
     public void listener(PlayerDeathEvent playerDeathEvent) {
-        Player user = playerDeathEvent.getEntity();
-        String userId = user.getUniqueId().toString();
-        boolean alreadExclude = false;
-        for (String i : ExchangeExcludeUser) {
-            if (i.equals(userId)) {
-                alreadExclude = true;
-                break;
+        if (isEnabled) {
+            Player user = playerDeathEvent.getEntity();
+            String userId = user.getUniqueId().toString();
+            boolean alreadExclude = false;
+            for (String i : ExchangeExcludeUser) {
+                if (i.equals(userId)) {
+                    alreadExclude = true;
+                    break;
+                }
             }
-        }
-        if (!alreadExclude) {
-            ExchangeExcludeUser.add(userId);
-            SendBroadcastMessage(user.getName() + " 死亡!");
-            user.setGameMode(GameMode.SPECTATOR);
-            var alive = GetAlivePlayer();
-            if (alive.size() == 1) {
-                SendBroadcastMessage("游戏结束! 获胜者是:" + alive.get(0).getName());
-                ResetPlugins();
+            if (!alreadExclude) {
+                ExchangeExcludeUser.add(userId);
+                SendBroadcastMessage(user.getName() + " 死亡!");
+                user.setGameMode(GameMode.SPECTATOR);
+                var alive = GetAlivePlayer();
+                if (alive.size() == 1) {
+                    SendBroadcastMessage("游戏结束! 获胜者是:" + alive.get(0).getName());
+                    ResetPlugins();
+                } else {
+                    SendBroadcastMessage("游戏继续！还有" + alive.size() + "个玩家");
+                }
             }
         }
     }
@@ -165,7 +169,6 @@ public final class Deathexchange extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
-        ResetPlugins();
     }
 
     @Override
