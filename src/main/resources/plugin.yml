@@ -1,0 +1,11 @@
+name: Deathexchange
+version: '${project.version}'
+main: deathexchange.deathexchange.Deathexchange
+api-version: 1.18
+author: Cyril Knox
+commands:
+  deathexchange:
+    aliases:
+      - "de"
+    usage: "use /de for more info"
+    description: "DeathChange helper command"
